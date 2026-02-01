@@ -25,5 +25,3 @@ Thumbs.db
 test-results
 playwright-report
 .yarn
-
-!.yarn/cache
