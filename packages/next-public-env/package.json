@@ -29,6 +29,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "prepare": "npm run build",
     "check-types": "tsc --noEmit"
   },
   "peerDependencies": {
