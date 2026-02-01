@@ -77,7 +77,7 @@ export const { getPublicEnv, PublicEnv } = createPublicEnv(
 );
 ```
 
-### 2. Add to Root Layout
+### 2. Add to Root Layout (App Router)
 
 Place `<PublicEnv />` in your root layout to make variables available
 client-side:
@@ -95,6 +95,32 @@ return (
       </body>
     </html>
   );
+}
+```
+
+### 2b. Add to _document (Pages Router)
+
+If you are using the Pages Router, render `<PublicEnvScript />` in your custom
+`_document.tsx` to inject the runtime variables:
+
+```tsx
+// pages/_document.tsx
+import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { PublicEnvScript } from '../public-env';
+
+export default class MyDocument extends Document {
+  render() {
+    return (
+      <Html lang="en">
+        <Head />
+        <body>
+          <PublicEnvScript />
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
+  }
 }
 ```
 
@@ -214,3 +240,4 @@ The function returns an object containing the `getPublicEnv` function and the
 | `getPublicEnv`| `() => EnvObject`   | A function that returns your public environment variables. The return type is inferred from your `publicEnv` object and Zod schema.      |
 | `getPublicEnvAsync`| `() => Promise<EnvObject>` | An async function that returns your public environment variables and opts-out of static rendering by calling `await connection()`. |
 | `PublicEnv`   | `React.Component`   | A React component that must be rendered in your root layout to inject the environment variables for client-side access.               |
+| `PublicEnvScript`   | `React.Component`   | A React component that must be rendered in `pages/_document.tsx` to inject the environment variables for client-side access.           |

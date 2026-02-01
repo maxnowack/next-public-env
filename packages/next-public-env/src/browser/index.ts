@@ -3,7 +3,7 @@ export function createPublicEnv() {
     getPublicEnv() {
       if (!('__NEXT_PUBLIC_ENV' in window)) {
         console.error(
-          `"__NEXT_PUBLIC_ENV" was not found on Window. Did you forget to render <PublicEnv /> in your root Layout?`,
+          `"__NEXT_PUBLIC_ENV" was not found on Window. Did you forget to render <PublicEnv /> in your root Layout or <PublicEnvScript /> in your _document?`,
         );
       }
 

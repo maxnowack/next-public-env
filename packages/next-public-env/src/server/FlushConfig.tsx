@@ -1,9 +1,7 @@
 'use client';
 import { useServerInsertedHTML } from 'next/navigation';
 import { useRef } from 'react';
-
-const setupFunctionString =
-  'function i(n){window.__NEXT_PUBLIC_ENV||Object.defineProperty(window,"__NEXT_PUBLIC_ENV",{value:Object.freeze(n),enumerable:!0})}';
+import { createScriptContent } from './flushScript.js';
 
 export const FlushConfig: React.FC<{ config: string; nonce?: string }> = ({
   config,
@@ -15,7 +13,7 @@ export const FlushConfig: React.FC<{ config: string; nonce?: string }> = ({
     if (hasFlushed.current) return null;
 
     hasFlushed.current = true;
-    const scriptContent = `(${setupFunctionString})(${config});`;
+    const scriptContent = createScriptContent(config);
 
     return (
       <script

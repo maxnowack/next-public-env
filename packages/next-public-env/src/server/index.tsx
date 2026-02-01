@@ -1,6 +1,7 @@
 import { z } from 'zod/v4';
 import * as z4 from 'zod/v4/core';
 import { FlushConfig } from './FlushConfig';
+import { FlushConfigScript } from './FlushConfigScript';
 import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 import { Suspense } from 'react';
 import { optOutOfStatic } from './optOutOfStatic';
@@ -78,6 +79,9 @@ type Options<Shape extends z4.$ZodShape> = {
 };
 
 type PublicEnvType = (props: { nonce?: string }) => Promise<React.ReactElement>;
+type PublicEnvScriptType = (props: {
+  nonce?: string;
+}) => React.ReactElement;
 
 export function createPublicEnv<
   Shape extends z4.$ZodShape,
@@ -89,6 +93,7 @@ export function createPublicEnv<
   getPublicEnv: () => z4.infer<z4.$ZodObject<Shape>>;
   getPublicEnvAsync: () => Promise<z4.infer<z4.$ZodObject<Shape>>>;
   PublicEnv: PublicEnvType;
+  PublicEnvScript: PublicEnvScriptType;
 };
 export function createPublicEnv<T extends Record<string, any>>(
   values: T,
@@ -97,6 +102,7 @@ export function createPublicEnv<T extends Record<string, any>>(
   getPublicEnv: () => T;
   getPublicEnvAsync: () => Promise<T>;
   PublicEnv: PublicEnvType;
+  PublicEnvScript: PublicEnvScriptType;
 };
 export function createPublicEnv(values: any, options?: Options<z4.$ZodShape>) {
   const schemaShapeFactory = options?.schema;
@@ -173,6 +179,13 @@ export function createPublicEnv(values: any, options?: Options<z4.$ZodShape>) {
       }
 
       return <PublicEnvInternal nonce={nonce} />;
+    },
+    /**
+     * A React component that serializes and flushes environment variables to
+     * the client for Next.js Pages Router.
+     */
+    PublicEnvScript({ nonce }: { nonce?: string }) {
+      return <FlushConfigScript config={stringifiedConfig} nonce={nonce} />;
     },
   };
 }

@@ -315,3 +315,21 @@ describe('PublicEnv', () => {
     expect(scriptElement.props.nonce).toBe(nonce);
   });
 });
+
+describe('PublicEnvScript', () => {
+  it('should render a script tag with serialized config', () => {
+    const values = {
+      API_URL: 'https://api.example.com',
+      PORT: 3000,
+    };
+
+    const { PublicEnvScript } = createPublicEnv(values);
+    const { container } = render(PublicEnvScript({}));
+
+    const scriptElement = container.querySelector('script');
+
+    expect(scriptElement?.innerHTML).toBe(
+      `(function i(n){window.__NEXT_PUBLIC_ENV||Object.defineProperty(window,"__NEXT_PUBLIC_ENV",{value:Object.freeze(n),enumerable:!0})})(${JSON.stringify(values)});`,
+    );
+  });
+});
